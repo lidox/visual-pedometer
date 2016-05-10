@@ -36,6 +36,7 @@
         <script src="js/modernizr.custom.js"></script>
         <script src="js/script.js"></script>
         <script src="js/jquery.csv.min.js"></script>
+        <script src="js/myday.js"></script>
         
 
         <!--[if lt IE 9]>
@@ -457,7 +458,7 @@
                                 var input;
                                 $(document).ready(function() {
                                     $.ajax({
-                                        url: "data/file1.csv",
+                                        url: "data/file3.csv",
                                         async: false,
                                         success: function (csvd) {
                                             var find = ';';
@@ -469,6 +470,10 @@
                                         complete: function () {
                                            //console.log('input:' + input);
                                            displayTable();
+                                        
+                                            // Hinweis zur AUslassung: Es gibt keinen Eintrag mit dem Index 2, somit wird dieser übersprungen
+                                            input.forEach(forEachRecord); 
+                                            console.log("");
                                         }
                                     });
                                 });
@@ -480,6 +485,57 @@
                                   var html = generateTable(input);
                                   $('#result').empty();
                                   $('#result').html(html);
+                                }
+                                
+                                var prevDateAsString = '';
+                                var myday = new MyDay();
+                                var dayList = [];
+                                function forEachRecord(element, index, array) {
+                                    if(index > 0) {
+                                        /*
+                                        var person2 = new Person("Bob");
+
+                                        // call the Person sayHello method.
+                                        person1.sayHello(); // logs "Hello, I'm Alice"
+                                        */
+                                        if(index == 1) {
+                                            prevDateAsString = element[0];
+                                            // create object
+                                            myday.addRecord(element);
+                                        }
+                                        else {
+                                            var currentDateAsString = element[0];
+                                            if(prevDateAsString.substring(0, 9) === currentDateAsString.substring(0, 9) ){
+                                                //console.log('same day =' + currentDateAsString );
+                                                // add to myday
+                                                myday.addRecord(element);
+                                            }
+                                            else {
+                                                prevDateAsString = element[0];
+                                                // create new myday objet and add to mydayobjectlist
+                                                dayList.push(myday);
+                                                myday = new MyDay();
+                                                myday.addRecord(element);
+                                                
+                                            }
+                                            /*
+                                            console.log('array[' + index + '] = ' + element);
+                                            console.log('Urzeit: ' + element[0]);
+                                            console.log('Schritte: ' + element[1]);
+                                            console.log('Aktivitätstyp: ' + element[2]);
+                                            console.log('Intensität: ' + element[3]);
+                                            console.log('Präzise Intensität: ' + element[4]);
+                                            */
+                                            
+                                        }
+                                        
+                                        
+                                    }
+                                    
+                                }
+                                
+                                function example1() {
+
                                 }
                                 
                                 /*
