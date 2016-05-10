@@ -9,7 +9,7 @@
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Elevator - Multipurpose Bootstrap Theme</title>
+        <title>Visualized Pedometer</title>
 
         <!-- Bootstrap Core CSS -->
         <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -35,6 +35,8 @@
         <script src="js/jqBootstrapValidation.js"></script>
         <script src="js/modernizr.custom.js"></script>
         <script src="js/script.js"></script>
+        <script src="js/jquery.csv.min.js"></script>
+        
 
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -51,7 +53,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="logo text-center">
-                            <h1>Visual Pedometer</h1>
+                            <h1>Visualized Pedometer</h1>
                             <span>Džiugas' Business Field</span>
                         </div>
                     </div>
@@ -85,7 +87,7 @@
                         <div class="menu-item light-red">
                             <a href="#about-modal" data-toggle="modal">
                                 <i class="fa fa-user"></i>
-                                <p>About Us</p>
+                                <p>Read CSV</p>
                             </a>
                         </div>
                         
@@ -445,14 +447,102 @@
                 <div class="container">
                     <div class="row">
                         <div class="section-title text-center">
-                            <h3>About Us</h3>
+                            <h3>Read CSV</h3>
                             <p>Duis aute irure dolor in reprehenderit in voluptate</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
+                            <script>  
+                                var input;
+                                $(document).ready(function() {
+                                    $.ajax({
+                                        url: "data/file1.csv",
+                                        async: false,
+                                        success: function (csvd) {
+                                            var find = ';';
+                                            var re = new RegExp(find, 'g');
+                                            csvd = csvd.replace(re, ',');
+                                            input = $.csv.toArrays(csvd);
+                                        },
+                                        dataType: "text",
+                                        complete: function () {
+                                           //console.log('input:' + input);
+                                           displayTable();
+                                        }
+                                    });
+                                });
+                                
+
+                                function displayTable() {
+                                  //var input = $('#input2').val();
+                                  //var data = $.csv.toArrays(input);
+                                  var html = generateTable(input);
+                                  $('#result').empty();
+                                  $('#result').html(html);
+                                }
+                                
+                                /*
+                                function example1() {
+                                  var input = $('#input1').val();
+                                  var data = $.csv.toArray(input);
+                                  var html = generateTable(data);
+                                  $('#result1').empty();
+                                  $('#result1').html(html);
+                                }
+
+                                function example3() {
+                                  var input = $('#input3').val();
+                                  var data = $.csv.toObjects(input);
+                                  var html = generateTable(data);
+                                  $('#result3').empty();
+                                  $('#result3').html(html);
+                                }
+                                */
+
+                                // build HTML table data from an array (one or two dimensional)
+                                function generateTable(data) {
+                                  var html = '';
+
+                                  if(typeof(data[0]) === 'undefined') {
+                                    return null;
+                                  }
+
+                                  if(data[0].constructor === String) {
+                                    html += '<tr>\r\n';
+                                    for(var item in data) {
+                                      html += '<td>' + data[item] + '</td>\r\n';
+                                    }
+                                    html += '</tr>\r\n';
+                                  }
+
+                                  if(data[0].constructor === Array) {
+                                    for(var row in data) {
+                                      html += '<tr>\r\n';
+                                      for(var item in data[row]) {
+                                        html += '<td>' + data[row][item] + '</td>\r\n';
+                                      }
+                                      html += '</tr>\r\n';
+                                    }
+                                  }
+
+                                  if(data[0].constructor === Object) {
+                                    for(var row in data) {
+                                      html += '<tr>\r\n';
+                                      for(var item in data[row]) {
+                                        html += '<td>' + item + ':' + data[row][item] + '</td>\r\n';
+                                      }
+                                      html += '</tr>\r\n';
+                                    }
+                                  }
+
+                                  return html;
+                                }
+                              </script>
                             <div class="about-text">
-                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident. It has roots in a piece of classical Latin literature from 45 BC</p>
+                                <!-- TODO: Tabelle auswerten--> 
+                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text.</p>
+                                <table id="result" border="1"></table>
                                 <div class="row">
                                     <div class="col-md-4 col-sm-6">
                                         <ul>

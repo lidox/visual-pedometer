@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var app = express();
-var port = 80;
+var port = 443;
 
 // middleware
 app.use(express.static(__dirname + '/public'));
