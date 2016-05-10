@@ -26,6 +26,9 @@ build/Release
 # Dependency directory
 node_modules
 
+# csv data
+public/data
+
 # Optional npm cache directory
 .npm
 
