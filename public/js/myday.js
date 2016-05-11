@@ -77,7 +77,7 @@ MyDay.prototype.getCriticalRecordList = function() {
 
 MyDay.prototype.getDate = function() {
     var firstRecord = this.recordList[0];
-    return firstRecord[0].substring(0, 9);
+    return firstRecord[0].substring(0, 10);
 };
 
 

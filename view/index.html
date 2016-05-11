@@ -424,6 +424,9 @@
                             <p>Upload your CVS and check its results!</p>
                             <!-- TODO: Lese Werte aus und packe sie in myDay-Objekte und gebe Tabelle aus--> 
                             <script src="js/extract-days.js"></script>
+                            <div class="col-md-12">
+                                <canvas id="myChart" width="400" height="260"></canvas>
+                            </div>
                             <table id="result" border="1"></table>
                         </div>
                     </div>
@@ -432,43 +435,55 @@
 
                             <script>
                                 $(document).ready(function() {
+                                    /*
                                     console.log('Datum: ' + dayList[3].getDate() +' Schrittzahl: ' + dayList[3].getStepsCount());
                                     var test = dayList[3].getCriticalRecordList();
                                     var test2 = dayList[3].getCriticalStepCount();
                                     var test3 = dayList[3].getStepsCountWithoutCritical();
                                     var test4 = dayList[3].getStepsCountWithoutCritical();
+                                    */
                                     console.log();
                                 });
                             </script>
-
-                            <div class="col-md-12">
-                                <canvas id="myChart" width="400" height="260"></canvas>
-                            </div>
                             
                             <!-- TODO TEST -->
                             <script>
                             //Morris charts snippet - js
                             $(document).ready(function() {
                                 var labelsDay = [];
+                                var stepCounts = [];
+                                var stepsCountWithoutCritical = [];
+                                
                                 for(var i= 0, l = dayList.length; i< l; i++){
                                     var item = dayList[i];
                                     var date = item.getDate();
                                     labelsDay.push(date);
+                                    stepCounts.push(dayList[i].getStepsCount());
+                                    stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
                                 }
                                 
                                 var data = {
-                                    labels: ["January", "February", "March", "April", "May", "June", "July"],
+                                    labels: labelsDay,
                                     datasets: [
                                         {
-                                            label: "My First dataset",
-                                            backgroundColor: "rgb(183, 230, 230)",
+                                            label: "normal step count",
+                                            backgroundColor: "rgb(250, 216, 22)",
                                             borderColor: "rgb(255, 67, 46)",
                                             borderWidth: 1,
-                                            hoverBackgroundColor: "rgb(183, 230, 230)",
+                                            hoverBackgroundColor: "rgb(250, 216, 22)",
                                             hoverBorderColor: "rgb(255, 67, 46)",
-                                            data: [65, 59, 80, 81, 56, 55, 40],
+                                            data: stepCounts,
+                                        },
+                                        {
+                                            label: "step count without critical",
+                                            backgroundColor: "rgb(6, 209, 6)",
+                                            borderColor: "rgb(255, 67, 46)",
+                                            borderWidth: 1,
+                                            hoverBackgroundColor: "rgb(6, 209, 6)",
+                                            hoverBorderColor: "rgb(255, 67, 46)",
+                                            data: stepsCountWithoutCritical,
                                         }
-                                    ]
+                                    ],
                                 };
 
                                 var ctx = document.getElementById("myChart");
@@ -478,10 +493,10 @@
                                     options: {
                                         scales: {
                                                 xAxes: [{
-                                                        stacked: true
+                                                        stacked: false
                                                 }],
                                                 yAxes: [{
-                                                        stacked: true
+                                                        stacked: false
                                                 }]
                                             }
                                         }

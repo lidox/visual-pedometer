@@ -46,7 +46,7 @@ function forEachRecord(element, index, array) {
         }
         else {
             var currentDateAsString = element[0];
-            if(prevDateAsString.substring(0, 9) === currentDateAsString.substring(0, 9) ){
+            if(prevDateAsString.substring(0, 10) === currentDateAsString.substring(0, 10) ){
                 //console.log('same day =' + currentDateAsString );
                 // add to myday
                 myday.addRecord(element);
