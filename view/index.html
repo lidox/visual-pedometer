@@ -37,7 +37,7 @@
         <script src="js/script.js"></script>
         <script src="js/jquery.csv.min.js"></script>
         <script src="js/myday.js"></script>
-        
+        <script src="js/Chart.js"></script>
 
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -421,13 +421,15 @@
                     <div class="row">
                         <div class="section-title text-center">
                             <h3>Read CSV</h3>
-                            <p>Duis aute irure dolor in reprehenderit in voluptate</p>
+                            <p>Upload your CVS and check its results!</p>
+                            <!-- TODO: Lese Werte aus und packe sie in myDay-Objekte und gebe Tabelle aus--> 
+                            <script src="js/extract-days.js"></script>
+                            <table id="result" border="1"></table>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12">
-                            <!-- TODO: Tabelle auswerten--> 
-                            <script src="js/extract-days.js"></script>
+
                             <script>
                                 $(document).ready(function() {
                                     console.log('Datum: ' + dayList[3].getDate() +' Schrittzahl: ' + dayList[3].getStepsCount());
@@ -438,128 +440,58 @@
                                     console.log();
                                 });
                             </script>
-                            <div class="about-text">
-                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text.</p>
-                                <table id="result" border="1"></table>
-                                <div class="row">
-                                    <div class="col-md-4 col-sm-6">
-                                        <ul>
-                                            <li><i class="fa fa-check-square"></i>Sed ut perspiciatis unde omnis iste natus</li>
-                                            <li><i class="fa fa-check-square"></i>Nor again is there anyone who loves</li>
-                                            <li><i class="fa fa-check-square-o"></i>At vero eos et accusamus et iusto odio</li>
-                                            <li><i class="fa fa-check-square-o"></i>Et harum quidem rerum facilis</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6">
-                                        <ul>
-                                            <li><i class="fa fa-check-square"></i>Nor again is there anyone who loves</li>
-                                            <li><i class="fa fa-check-square"></i>Nor again is there anyone who loves</li>
-                                            <li><i class="fa fa-check-square-o"></i>Et harum quidem rerum facilis</li>
-                                            <li><i class="fa fa-check-square-o"></i>At vero eos et accusamus et iusto odio</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-4 col-sm-6">
-                                        <ul>
-                                            <li><i class="fa fa-check-square"></i>Nor again is there anyone who loves</li>
-                                            <li><i class="fa fa-check-square"></i>Nor again is there anyone who loves</li>
-                                            <li><i class="fa fa-check-square-o"></i>Et harum quidem rerum facilis</li>
-                                            <li><i class="fa fa-check-square-o"></i>At vero eos et accusamus et iusto odio</li>
-                                        </ul>
-                                    </div>
-                                </div><!-- /.row -->
+
+                            <div class="col-md-12">
+                                <canvas id="myChart" width="400" height="260"></canvas>
                             </div>
-                        </div>
-                    </div><!-- /.row -->
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6">
-                            <div class="skill-shortcode">
-                        
-                                <!-- Progress Bar -->
-                                <div class="skill">
-                                    <p>Web Design</p>          
-                                    <div class="progress">         
-                                        <div class="progress-bar" role="progressbar"  data-percentage="60">
-                                            <span class="progress-bar-span" >60%</span>
-                                            <span class="sr-only">60% Complete</span>
-                                        </div>
-                                    </div>  
-                                </div>
+                            
+                            <!-- TODO TEST -->
+                            <script>
+                            //Morris charts snippet - js
+                            $(document).ready(function() {
+                                var labelsDay = [];
+                                for(var i= 0, l = dayList.length; i< l; i++){
+                                    var item = dayList[i];
+                                    var date = item.getDate();
+                                    labelsDay.push(date);
+                                }
+                                
+                                var data = {
+                                    labels: ["January", "February", "March", "April", "May", "June", "July"],
+                                    datasets: [
+                                        {
+                                            label: "My First dataset",
+                                            backgroundColor: "rgb(183, 230, 230)",
+                                            borderColor: "rgb(255, 67, 46)",
+                                            borderWidth: 1,
+                                            hoverBackgroundColor: "rgb(183, 230, 230)",
+                                            hoverBorderColor: "rgb(255, 67, 46)",
+                                            data: [65, 59, 80, 81, 56, 55, 40],
+                                        }
+                                    ]
+                                };
 
-                                <!-- Progress Bar -->
-                                <div class="skill">
-                                    <p>HTML & CSS</p>          
-                                    <div class="progress">         
-                                        <div class="progress-bar" role="progressbar"  data-percentage="95">
-                                            <span class="progress-bar-span" >95%</span>
-                                            <span class="sr-only">95% Complete</span>
-                                        </div>
-                                    </div>  
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div class="skill">
-                                    <p>Wordpress</p>          
-                                    <div class="progress">         
-                                        <div class="progress-bar" role="progressbar"  data-percentage="80">
-                                            <span class="progress-bar-span" >80%</span>
-                                            <span class="sr-only">80% Complete</span>
-                                        </div>
-                                    </div>  
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div class="skill">
-                                    <p>Joomla</p>          
-                                    <div class="progress">         
-                                        <div class="progress-bar" role="progressbar"  data-percentage="100">
-                                            <span class="progress-bar-span" >100%</span>
-                                            <span class="sr-only">100% Complete</span>
-                                        </div>
-                                    </div>  
-                                </div>
-
-                                <!-- Progress Bar -->
-                                <div class="skill">
-                                    <p>Extension</p>          
-                                    <div class="progress">         
-                                        <div class="progress-bar" role="progressbar"  data-percentage="70">
-                                            <span class="progress-bar-span" >70%</span>
-                                            <span class="sr-only">70% Complete</span>
-                                        </div>
-                                    </div>  
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="custom-tab">
-                        
-                                <ul class="nav nav-tabs nav-justified" role="tablist">
-                                    <li class="active"><a href="#tab-1" role="tab" data-toggle="tab">Our Mission</a></li>
-                                    <li><a href="#tab-2" role="tab" data-toggle="tab">Our Vission</a></li>
-                                    <li><a href="#tab-3" role="tab" data-toggle="tab">Company History</a></li>
-                                </ul>
-
-                                <div class="tab-content">
-
-                                    <div class="tab-pane active" id="tab-1">
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio.</p>
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-                                     </div>
-
-
-                                    <div class="tab-pane" id="tab-2">
-                                        <p>Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus.</p>
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-                                    </div>
-
-
-                                    <div class="tab-pane" id="tab-3">
-                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-                                        <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
-                                    </div>
-
-                                </div><!-- /.tab-content -->
+                                var ctx = document.getElementById("myChart");
+                                var myBarChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: data,
+                                    options: {
+                                        scales: {
+                                                xAxes: [{
+                                                        stacked: true
+                                                }],
+                                                yAxes: [{
+                                                        stacked: true
+                                                }]
+                                            }
+                                        }
+                                    });
+                                
+                            });
+                            </script>
+                            
+ 
+                            <!-- TODO TEST -->
 
                             </div>
                         </div>
