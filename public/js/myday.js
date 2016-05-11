@@ -1,10 +1,12 @@
 function MyDay() {
 	this.recordList = new Array();
+    this.criticalRecordList = new Array();
     this.stepCount = 0;
+    this.criticalStepCount = 0;
+    this.criticalIntensityValue = 200;
 }
 
 MyDay.prototype.addRecord = function(record) {
-    //Array.prototype.push.apply(this.recordList, [record]);
     this.recordList.push(record);
 };
 
@@ -24,6 +26,53 @@ MyDay.prototype.getStepsCount = function() {
     }
     
     return this.stepCount;
+};
+
+MyDay.prototype.getStepsCountWithoutCritical = function() {
+    var getStepsCount = parseInt(this.getStepsCount() );
+    var getCriticalStepCount = parseInt(this.getCriticalStepCount() );
+    var stepsCountWithoutCritical = getStepsCount - getCriticalStepCount;
+    return stepsCountWithoutCritical;
+};
+
+MyDay.prototype.getCriticalStepCount = function() {
+    if (this.criticalStepCount !== 0) {
+        this.criticalStepCount = 0;
+    }
+    this.getCriticalRecordList();
+    for(var i= 0, l = this.criticalRecordList.length; i< l; i++){
+        var item = this.criticalRecordList[i];
+        if(isNumber(item[1])){
+            this.criticalStepCount += parseInt(item[1]); 
+        }
+    }
+    
+    function isNumber(obj) { 
+        return !isNaN(parseFloat(obj)); 
+    }
+    
+    return this.criticalStepCount;
+    
+};
+
+MyDay.prototype.getCriticalRecordList = function() {
+    this.criticalRecordList = new Array();
+    for(var i= 0, l = this.recordList.length; i< l; i++){
+        var item = this.recordList[i];
+        var preciseIntensity = item[4];
+        if(isNumber(preciseIntensity)){
+            preciseIntensity = parseInt(preciseIntensity);
+            if(preciseIntensity >= this.criticalIntensityValue ) {
+                this.criticalRecordList.push(item);
+            }
+        }
+    }
+    
+    function isNumber(obj) { 
+        return !isNaN(parseFloat(obj)); 
+    }
+    
+    return this.criticalRecordList;
 };
 
 MyDay.prototype.getDate = function() {
