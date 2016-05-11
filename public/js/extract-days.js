@@ -6,7 +6,7 @@ var dayList = [];
 
 $(document).ready(function() {
     $.ajax({
-        url: "data/file3.csv",
+        url: "data/file1.csv",
         async: false,
         success: function (csvd) {
             var find = ';';
