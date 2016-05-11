@@ -5,6 +5,7 @@ var myday = new MyDay();
 var dayList = [];
 
 $(document).ready(function() {
+    /*
     $.ajax({
         url: "data/file3.csv",
         async: false,
@@ -22,8 +23,116 @@ $(document).ready(function() {
             dayList;
         }
     });
+    */
+
+      if(isAPIAvailable()) {
+        $('#fileInput').bind('change', handleFileSelect);
+      }
 });
 
+// displays a warning if the browser doesn't support the HTML5 File API
+function isAPIAvailable() {
+  // Check for the various File API support.
+  if (window.File && window.FileReader && window.FileList && window.Blob) {
+    // Great success! All the File APIs are supported.
+    return true;
+  } else {
+    alert("The browser you're using does not currently support\nthe HTML5 File API. As a result the file loading demo\nwon't work properly.");
+    return false;
+  }
+}
+
+// handles csv files
+function handleFileSelect(evt) {
+  var files = evt.target.files; // FileList object
+
+  // todo: reset dataset
+  
+    
+  for(var i=0, len=files.length; i<len; i++) {
+    flotFileData(files[i], i);
+  }
+}
+
+function flotFileData(file, i) {
+  var reader = new FileReader();
+  reader.readAsText(file);
+  reader.onload = function(event){
+    var csv = event.target.result;
+    var find = ';';
+    var re = new RegExp(find, 'g');
+    csv = csv.replace(re, ',');
+    input = $.csv.toArrays(csv);
+      
+    displayTable();
+    input.forEach(forEachRecord); 
+    console.log("finished to extract days! :)");
+    dayList;
+    displayChart();  
+  };
+  reader.onerror = function(){ 
+      console.log('Unable to read ' + file.fileName);
+      alert('Unable to read ' + file.fileName); 
+  };
+}
+
+function displayChart() {
+    //Morris charts snippet - js
+    $(document).ready(function() {
+        var labelsDay = [];
+        var stepCounts = [];
+        var stepsCountWithoutCritical = [];
+
+        for(var i= 0, l = dayList.length; i< l; i++){
+            var item = dayList[i];
+            var date = item.getDate();
+            labelsDay.push(date);
+            stepCounts.push(dayList[i].getStepsCount());
+            stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
+        }
+
+        var data = {
+            labels: labelsDay,
+            datasets: [
+                {
+                    label: "normal step count",
+                    backgroundColor: "rgb(250, 216, 22)",
+                    borderColor: "rgb(255, 67, 46)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgb(250, 216, 22)",
+                    hoverBorderColor: "rgb(255, 67, 46)",
+                    data: stepCounts,
+                },
+                {
+                    label: "step count without critical",
+                    backgroundColor: "rgb(6, 209, 6)",
+                    borderColor: "rgb(255, 67, 46)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgb(6, 209, 6)",
+                    hoverBorderColor: "rgb(255, 67, 46)",
+                    data: stepsCountWithoutCritical,
+                }
+            ],
+        };
+
+        var ctx = document.getElementById("myChart");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                        xAxes: [{
+                                stacked: false
+                        }],
+                        yAxes: [{
+                                stacked: false
+                        }]
+                    }
+                }
+            });
+
+    });
+}
 
 function displayTable() {
   //var input = $('#input2').val();

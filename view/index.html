@@ -422,6 +422,7 @@
                         <div class="section-title text-center">
                             <h3>Read CSV</h3>
                             <p>Upload your CVS and check its results!</p>
+                            <input id="fileInput" type="file" name="files[]" multiple="">
                             <!-- TODO: Lese Werte aus und packe sie in myDay-Objekte und gebe Tabelle aus--> 
                             <script src="js/extract-days.js"></script>
                             <div class="col-md-12">
@@ -431,21 +432,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-
-                            <script>
-                                $(document).ready(function() {
-                                    /*
-                                    console.log('Datum: ' + dayList[3].getDate() +' Schrittzahl: ' + dayList[3].getStepsCount());
-                                    var test = dayList[3].getCriticalRecordList();
-                                    var test2 = dayList[3].getCriticalStepCount();
-                                    var test3 = dayList[3].getStepsCountWithoutCritical();
-                                    var test4 = dayList[3].getStepsCountWithoutCritical();
-                                    */
-                                    console.log();
-                                });
-                            </script>
-                            
+                        <div class="col-md-12">   
                             <!-- TODO TEST -->
                             <script>
                             //Morris charts snippet - js
@@ -504,8 +491,6 @@
                                 
                             });
                             </script>
-                            
- 
                             <!-- TODO TEST -->
 
                             </div>
