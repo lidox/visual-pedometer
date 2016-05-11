@@ -11,6 +11,11 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/view/index.html'));
 });
 
+// template.html
+app.get('/template', function(req, res) {
+    res.sendFile(path.join(__dirname + '/view/template.html'));
+});
+
 app.listen(port, function () {
   console.log('visual pedometer app listening on port: ' + port);
 });
