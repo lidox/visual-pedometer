@@ -5,26 +5,6 @@ var myday = new MyDay();
 var dayList = [];
 
 $(document).ready(function() {
-    /*
-    $.ajax({
-        url: "data/file3.csv",
-        async: false,
-        success: function (csvd) {
-            var find = ';';
-            var re = new RegExp(find, 'g');
-            csvd = csvd.replace(re, ',');
-            input = $.csv.toArrays(csvd);
-        },
-        dataType: "text",
-        complete: function () {
-            displayTable();
-            input.forEach(forEachRecord); 
-            console.log("finished to extract days! :)");
-            dayList;
-        }
-    });
-    */
-
       if(isAPIAvailable()) {
         $('#fileInput').bind('change', handleFileSelect);
       }
@@ -44,10 +24,10 @@ function isAPIAvailable() {
 
 // handles csv files
 function handleFileSelect(evt) {
-  var files = evt.target.files; // FileList object
+  var files = evt.target.files; 
 
   // todo: reset dataset
-  dayList = [];
+  
     
   for(var i=0, len=files.length; i<len; i++) {
     flotFileData(files[i], i);
@@ -64,11 +44,12 @@ function flotFileData(file, i) {
     csv = csv.replace(re, ',');
     input = $.csv.toArrays(csv);
       
-    displayTable();
+    //displayTable();
     input.forEach(forEachRecord); 
     console.log("finished to extract days! :)");
     dayList;
-    displayChart();  
+    displayChart(); 
+    displayResonsiveTable(dayList);
   };
   reader.onerror = function(){ 
       console.log('Unable to read ' + file.fileName);
@@ -197,7 +178,7 @@ function generateTable(data) {
   if(typeof(data[0]) === 'undefined') {
     return null;
   }
-
+ /*
   if(data[0].constructor === String) {
     html += '<tr>\r\n';
     for(var item in data) {
@@ -205,6 +186,8 @@ function generateTable(data) {
     }
     html += '</tr>\r\n';
   }
+    */
+
 
   if(data[0].constructor === Array) {
     for(var row in data) {
@@ -215,7 +198,9 @@ function generateTable(data) {
       html += '</tr>\r\n';
     }
   }
-
+  
+    
+    /*
   if(data[0].constructor === Object) {
     for(var row in data) {
       html += '<tr>\r\n';
@@ -225,6 +210,53 @@ function generateTable(data) {
       html += '</tr>\r\n';
     }
   }
-
+*/
   return html;
+}
+
+// build HTML table data from an array (one or two dimensional)
+function generateDivTable(data) {
+  var html = '';
+  var date = 'Date';
+  var stepCount = 'Steps';
+  var noCriticalSteps = 'True Step count';
+    
+  if(typeof(data[0]) === 'undefined') {
+    return null;
+  }
+
+  
+  html += '<div class="divtable accordion-xs">\r\n';
+  html += '<div class="tr headings">\r\n';
+  html += '<div class="th firstname">'+ date +'</div>\r\n';
+  html += '<div class="th lastname">'+ stepCount +'</div>\r\n';
+  html += '<div class="th username">'+ noCriticalSteps +'</div>\r\n';
+  html += '</div>\r\n';
+      
+    for(var row in data) {
+            var day = data[row];
+
+            html += '<div class="tr">\r\n';
+            html += '<div class="td firstname accordion-xs-toggle">' + day.getDate() + '</div>\r\n';
+                html += '<div class="accordion-xs-collapse" aria-expanded="false">\r\n';
+                    html += '<div class="inner">\r\n';
+                        html += '<div class="td lastname">'+ day.getStepsCount() + '</div>\r\n';
+                        html += '<div class="td username">'+ day.getStepsCountWithoutCritical() + '</div>\r\n';
+                    html += '</div>\r\n';
+                html += '</div>\r\n';
+            html += '</div>\r\n';
+    }
+  
+  html += '</div>\r\n';
+  html += '</div>';
+  return html;
+}
+
+function displayResonsiveTable(data) {
+  //var input = $('#input2').val();
+  //var data = $.csv.toArrays(input);
+  var html = generateDivTable(data);
+    console.log();
+  $('#resultTable').empty();
+  $('#resultTable').html(html);
 }
