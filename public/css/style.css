@@ -1034,3 +1034,11 @@ and (max-width : 991px) {
 body {
     background-color: black;
 }
+
+.clickable {
+    cursor: pointer;
+}
+
+.right-col {
+    text-align: center;
+}

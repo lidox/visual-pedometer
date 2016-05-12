@@ -5,6 +5,7 @@ var extractDays = function () {
     var myday = new MyDay();
     var dayList = [];
     var myBarChart;
+    var isBarChartEnabled = true;
 
     $(document).ready(function () {
         if (isAPIAvailable()) {
@@ -28,6 +29,7 @@ var extractDays = function () {
             console.log("finished to extract days! :)");
             displayChart();
             displayResonsiveTable(dayList);
+            hideInfos();
         };
         reader.onerror = function () {
             console.log('Unable to read ' + file.fileName);
@@ -55,74 +57,69 @@ var extractDays = function () {
         dayList = [];
         //for (i in myBarChart.datasets[0].points)
         //    myBarChart.removeData();
-        
+
         for (var i = 0, len = files.length; i < len; i++) {
             flotFileData(files[i], i);
         }
     }
 
     function displayChart() {
-        //Morris charts snippet - js
+        console.log('all days chart');
+        var labelsDay = [];
+        var stepCounts = [];
+        var stepsCountWithoutCritical = [];
 
-            var labelsDay = [];
-            var stepCounts = [];
-            var stepsCountWithoutCritical = [];
+        for (var i = 0, l = dayList.length; i < l; i++) {
+            var item = dayList[i];
+            var date = item.getDate();
+            labelsDay.push(date);
+            stepCounts.push(dayList[i].getStepsCount());
+            stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
+        }
 
-            for (var i = 0, l = dayList.length; i < l; i++) {
-                var item = dayList[i];
-                var date = item.getDate();
-                labelsDay.push(date);
-                stepCounts.push(dayList[i].getStepsCount());
-                stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
-            }
-
-            var data = {
-                labels: labelsDay,
-                datasets: [
-                    {
-                        label: "normal step count",
-                        backgroundColor: "rgb(250, 216, 22)",
-                        borderColor: "rgb(255, 67, 46)",
-                        borderWidth: 1,
-                        hoverBackgroundColor: "rgb(250, 216, 22)",
-                        hoverBorderColor: "rgb(255, 67, 46)",
-                        data: stepCounts,
+        var data = {
+            labels: labelsDay,
+            datasets: [
+                {
+                    label: "normal step count",
+                    backgroundColor: "rgb(250, 216, 22)",
+                    borderColor: "rgb(255, 67, 46)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgb(250, 216, 22)",
+                    hoverBorderColor: "rgb(255, 67, 46)",
+                    data: stepCounts,
                 },
-                    {
-                        label: "step count without critical",
-                        backgroundColor: "rgb(6, 209, 6)",
-                        borderColor: "rgb(255, 67, 46)",
-                        borderWidth: 1,
-                        hoverBackgroundColor: "rgb(6, 209, 6)",
-                        hoverBorderColor: "rgb(255, 67, 46)",
-                        data: stepsCountWithoutCritical,
+                {
+                    label: "step count without critical",
+                    backgroundColor: "rgb(6, 209, 6)",
+                    borderColor: "rgb(255, 67, 46)",
+                    borderWidth: 1,
+                    hoverBackgroundColor: "rgb(6, 209, 6)",
+                    hoverBorderColor: "rgb(255, 67, 46)",
+                    data: stepsCountWithoutCritical,
                 }
             ],
-            };
-        
-            if(myBarChart != null) {
-                myBarChart.destroy();
-            } // i initialize myBarChart var with null
-   
-            //myBarChart = new Chart(ctxmini).Bar(data, options);
+        };
 
-            var ctx = document.getElementById("myChart");
-            myBarChart = new Chart(ctx, {
-                type: 'bar',
-                data: data,
-                options: {
-                    scales: {
-                        xAxes: [{
-                            stacked: false
+        if (myBarChart != null) {
+            myBarChart.destroy();
+        }
+
+        var ctx = document.getElementById("myChart");
+        myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: false
                         }],
-                        yAxes: [{
-                            stacked: false
+                    yAxes: [{
+                        stacked: false
                         }]
-                    }
                 }
-            });
-
-
+            }
+        });
     }
 
     function displayTable() {
@@ -203,15 +200,33 @@ var extractDays = function () {
         for (var row in data) {
             var day = data[row];
 
-            html += '<div class="tr">\r\n';
-            html += '<div class="td firstname accordion-xs-toggle">' + day.getDate() + '</div>\r\n';
+            html += '<div class="tr" id="details_1">\r\n';
+            html += '<div class="td firstname accordion-xs-toggle clickable warning dropdown-deliverable">' + day.getDate() + '</div>\r\n';
             html += '<div class="accordion-xs-collapse" aria-expanded="false">\r\n';
-            html += '<div class="inner">\r\n';
-            html += '<div class="td lastname">' + day.getStepsCount() + '</div>\r\n';
-            html += '<div class="td username">' + day.getStepsCountWithoutCritical() + '</div>\r\n';
+            html += '<div class="inner clickable">\r\n';
+            html += '<div class="td lastname clickable">' + day.getStepsCount() + '</div>\r\n';
+            html += '<div class="td username clickable">' + day.getStepsCountWithoutCritical() + '</div>\r\n';
             html += '</div>\r\n';
             html += '</div>\r\n';
             html += '</div>\r\n';
+
+            /*
+            //ab hier test
+            html += '<div class="deliverable-infos" id="details_1">\r\n';
+            html += '<table class="table table-condensed table-user-content" id="hidden_table_1">\r\n';
+            html += '<tbody>\r\n';
+            html += '<tr>\r\n';
+            html += '<td>Started :</td>\r\n';
+            html += '<td class="right-col">April 22, 2013</td>\r\n';
+            html += '</tr>\r\n';
+            html += '<tr>\r\n';
+            html += '<td>Load :</td>\r\n';
+            html += '<td class="right-col">500 h</td>\r\n';
+            html += '</tr>\r\n';
+            html += '</tbody>\r\n';
+            html += '</table>\r\n';
+            html += ' </div>\r\n';
+            */
         }
 
         html += '</div>\r\n';
@@ -279,6 +294,118 @@ var extractDays = function () {
                 }
             });
         });
+    }
+
+    function hideInfos() {
+        $('.deliverable-infos').hide();
+        $('.dropdown-deliverable').on('click', function (e) {
+            console.log("dropdown toggled!");
+            e.preventDefault();
+            e.stopPropagation();
+            //get targeted element via data-for attribute
+            var dataFor = $(this).data('for');
+            console.log($(this).text());
+
+            var selectedDate = getDayByDate($(this).text());
+            if (selectedDate !== -1) {
+                if (isBarChartEnabled) {
+                    isBarChartEnabled = false;
+                    displayDayChart(selectedDate);
+                } else {
+                    isBarChartEnabled = true;
+                    displayChart();
+                }
+                document.getElementById('myChart').scrollIntoView(true);
+
+            }
+        });
+    }
+
+    function getDayByDate(date) {
+        for (var i = 0, l = dayList.length; i < l; i++) {
+            var item = dayList[i];
+            if (item.getDate() === date) {
+                return item;
+            }
+        }
+        return -1;
+    }
+
+    function displayDayChart(selectedDate) {
+        console.log('day chart');
+        selectedDate.recordList;
+        var labelsDay = [];
+        var stepCounts = [];
+        var stepsCountWithoutCritical = [];
+        var myDate = selectedDate.getDate();
+        for (var i = 0, l = selectedDate.recordList.length; i < l; i++) {
+            var item = selectedDate.recordList[i];
+            var dayTime = item[0].substring(10);
+            var intensity = parseInt(item[4]);
+            var justaDay = new MyDay();
+            if (intensity >= justaDay.criticalIntensityValue) {
+                dayTime += ' (intensity: ' + item[4] + ')';
+            }
+            var steps = item[1];
+            labelsDay.push(dayTime);
+            stepCounts.push(steps);
+            //stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
+        }
+
+        var data = {
+            labels: labelsDay,
+            datasets: [
+                {
+                    label: myDate,
+                    fillColor: "rgba(48,197,83,1)",
+                    backgroundColor: "rgba(48,197,83,0.2)",
+                    pointColor: "rgba(48,197,83,1)",
+                    pointStrokeColor: "#fff",
+                    hoverBackgroundColor: "rgba(48,197,83,0.2)",
+                    hoverBorderColor: "rgba(48,197,83,0.2)",
+                    data: stepCounts
+                }
+            ],
+        };
+
+        if (myBarChart != null) {
+            myBarChart.destroy();
+        }
+
+        var ctx = document.getElementById("myChart");
+        myBarChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                scales: {
+                    xAxes: [{
+                        stacked: false
+                        }],
+                    yAxes: [{
+                        stacked: false
+                        }]
+                }
+            },
+            /*
+            pointDot: false,
+            scaleOverride: true,
+            scaleStartValue: 0
+            */
+        });
+
+        /* for
+        var test2 = myBarChart.config.data.datasets[0];
+        var list = myBarChart.config.data.datasets[0].data;
+        for (var i = 0, l = selectedDate.recordList.length; i < l; i++) {
+            var item = selectedDate.recordList[i];
+            var dayTime = item[0].substring(10) + ' (intensity: ' + item[4] + ')';
+            var steps = item[1];
+        }
+        if (myBarChart.datasets[0].points[4].value > 100) {
+            myBarChart.datasets[0].points[4].fillColor = "lightgreen";
+            myBarChart.update();
+        }
+        */
     }
 
 }
