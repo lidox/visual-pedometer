@@ -1015,9 +1015,9 @@ and (max-width : 991px) {
 
 .accordion-xs-collapse .td:before { font-weight: bold; }
 
-.accordion-xs-collapse .lastname:before { content: 'Steps: '; }
+.accordion-xs-collapse .lastname:before { content: 'Steps taken (with crit. intensity): '; }
 
-.accordion-xs-collapse .username:before { content: 'True Step count: '; }
+.accordion-xs-collapse .username:before { content: 'Steps taken (without crit.): '; }
 
 .accordion-xs .accordion-xs-toggle:after {
   position: relative;

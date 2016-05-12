@@ -81,7 +81,7 @@ var extractDays = function () {
             labels: labelsDay,
             datasets: [
                 {
-                    label: "normal step count",
+                    label: "Steps taken (with critical intensity)",
                     backgroundColor: "rgb(250, 216, 22)",
                     borderColor: "rgb(255, 67, 46)",
                     borderWidth: 1,
@@ -90,7 +90,7 @@ var extractDays = function () {
                     data: stepCounts,
                 },
                 {
-                    label: "step count without critical",
+                    label: "Steps taken (without crit.)",
                     backgroundColor: "rgb(6, 209, 6)",
                     borderColor: "rgb(255, 67, 46)",
                     borderWidth: 1,
