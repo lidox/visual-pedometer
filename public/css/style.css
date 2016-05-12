@@ -1030,3 +1030,7 @@ and (max-width : 991px) {
   -webkit-font-smoothing: antialiased;
 }
 }
+
+body {
+    background-color: black;
+}
