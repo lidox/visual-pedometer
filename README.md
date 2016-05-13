@@ -7,7 +7,4 @@
 - [x] Nice charts thanks to [charts.js](http://www.chartjs.org/)
 - [x] Good theme thanks to [Elevator](https://graygrids.com/demos/themes/elevator/)
 
-#### Online Demo
-https://lidox.github.io/visual-pedometer/
-
 
