@@ -332,25 +332,28 @@ var extractDays = function () {
     }
 
     function displayDayChart(selectedDate) {
-        console.log('day chart');
-        selectedDate.recordList;
-        var labelsDay = [];
-        var stepCounts = [];
-        var stepsCountWithoutCritical = [];
-        var myDate = selectedDate.getDate();
-        for (var i = 0, l = selectedDate.recordList.length; i < l; i++) {
-            var item = selectedDate.recordList[i];
-            var dayTime = item[0].substring(10);
-            var intensity = parseInt(item[4]);
-            var justaDay = new MyDay();
-            if (intensity >= justaDay.criticalIntensityValue) {
-                dayTime += ' (intensity: ' + item[4] + ')';
-            }
-            var steps = item[1];
-            labelsDay.push(dayTime);
-            stepCounts.push(steps);
-            //stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
-        }
+		console.log('day chart');
+		selectedDate.recordList;
+		var labelsDay = [];
+		var stepCounts = [];
+		var intensityList = [];
+		var stepsCountWithoutCritical = [];
+		var myDate = selectedDate.getDate() + " total steps";
+		var intensityLabel = "intensity";
+		for (var i = 0, l = selectedDate.recordList.length; i < l; i++) {
+			var item = selectedDate.recordList[i];
+			var dayTime = item[0].substring(10);
+			var intensity = parseInt(item[4]);
+			var justaDay = new MyDay();
+			if (intensity >= justaDay.criticalIntensityValue) {
+				dayTime += ' (intensity: ' + item[4] + ')';
+			}
+			var steps = item[1];
+			labelsDay.push(dayTime);
+			stepCounts.push(steps);
+			intensityList.push(intensity);
+			//stepsCountWithoutCritical.push(dayList[i].getStepsCountWithoutCritical());
+		}
 
         var data = {
             labels: labelsDay,
@@ -364,6 +367,27 @@ var extractDays = function () {
                     hoverBackgroundColor: "rgba(48,197,83,0.2)",
                     hoverBorderColor: "rgba(48,197,83,0.2)",
                     data: stepCounts
+                },
+				{
+					label: intensityLabel,
+					fill: false,
+					lineTension: 0.1,
+					backgroundColor: "rgba(255,99,132,0.2)",
+					borderColor: "rgba(255,99,132,1)",
+					borderCapStyle: 'butt',
+					borderDash: [],
+					borderDashOffset: 0.0,
+					borderJoinStyle: 'miter',
+					pointBorderColor: "rgba(255,99,132,1)",
+					pointBackgroundColor: "#fff",
+					pointBorderWidth: 1,
+					pointHoverRadius: 5,
+					pointHoverBackgroundColor: "rgba(255,99,132,1))",
+					pointHoverBorderColor: "rgba(220,220,220,1)",
+					pointHoverBorderWidth: 2,
+					pointRadius: 1,
+					pointHitRadius: 10,
+					data: intensityList
                 }
             ],
         };
